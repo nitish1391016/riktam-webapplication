@@ -23,7 +23,7 @@ session_start();
     <!-- cards view -->
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 m-2">
         <div class="col">
-            <a class="card h-100 text-dark civic_main_card" href="civic_details.html">
+            <a class="card h-100 text-dark civic_main_card" href="civic_details.php">
                 <img src="images/demo.jpeg" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Card title</h5>

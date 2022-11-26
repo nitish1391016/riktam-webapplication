@@ -44,13 +44,13 @@ session_start();
                   <h2 class=" text-center mb-5">Login Form</h2>
                   <!-- Email input -->
                   <div class="form-outline mb-4">
-                    <input type="email" id="form3Example3" name="useremail" class="form-control" />
+                    <input type="email" id="form3Example3" name="useremail" class="form-control" required/>
                     <label class="form-label" for="form3Example3">Email address</label>
                   </div>
 
                   <!-- Password input -->
                   <div class="form-outline mb-4">
-                    <input type="password" id="form3Example4" name="userpassword" class="form-control" />
+                    <input type="password" id="form3Example4" name="userpassword" class="form-control" required/>
                     <label class="form-label" for="form3Example4">Password</label>
                   </div>
 
@@ -76,7 +76,6 @@ session_start();
   if (isset($_POST['submit'])) {
     $email = $_POST['useremail'];
     $password = $_POST['userpassword'];
-    $conn = mysqli_connect('localhost', 'root', '', 'civic_problems');
     if (mysqli_num_rows(mysqli_query($conn, "select * from users where email = '$email' and password = '$password'")) > 0) {
       echo '<script>alert("Login Successfull");</script>';
       $_SESSION['useremail'] = $email;

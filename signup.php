@@ -46,7 +46,7 @@ session_start();
                   <div class="row">
                     <div class="col mb-4">
                       <div class="form-outline">
-                        <input type="text" id="form3Example1" class="form-control" name="username" />
+                        <input type="text" id="form3Example1" class="form-control" name="username" required/>
                         <label class="form-label" for="form3Example1">Name</label>
                       </div>
                     </div>
@@ -54,13 +54,13 @@ session_start();
 
                   <!-- Email input -->
                   <div class="form-outline mb-4">
-                    <input type="email" id="form3Example3" class="form-control" name="useremail" />
+                    <input type="email" id="form3Example3" class="form-control" name="useremail" required/>
                     <label class="form-label" for="form3Example3">Email address</label>
                   </div>
 
                   <!-- Password input -->
                   <div class="form-outline mb-4">
-                    <input type="password" id="form3Example4" class="form-control" name="userpassword" />
+                    <input type="password" id="form3Example4" class="form-control" name="userpassword" required/>
                     <label class="form-label" for="form3Example4">Password</label>
                   </div>
 
@@ -84,7 +84,6 @@ session_start();
     $name = $_POST['username'];
     $email = $_POST['useremail'];
     $password = $_POST['userpassword'];
-    $conn = mysqli_connect('localhost', 'root', '', 'civic_problems');
     if (mysqli_num_rows(mysqli_query($conn, "select * from users where email = '$email'")) == 0){
       mysqli_query($conn, " INSERT INTO users (name, email, password) values ('$name','$email','$password')");
       echo '<script>alert("SignUp Successfull");</script>';
