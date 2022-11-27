@@ -16,69 +16,22 @@ session_start();
 </head>
 
 <body>
-<?php
-  include 'assets/navbar.php'
-  ?>
+    <?php
+    include 'assets/navbar.php'
+    ?>
 
+    <h2 class="text-center my-4">Problems</h2>
     <!-- cards view -->
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 m-2">
-        <div class="col">
-            <a class="card h-100 text-dark civic_main_card" href="civic_details.php">
-                <img src="images/demo.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                    <div class=" d-flex justify-content-between ">
-                        <small>Location: <i>Medchal</i></small>
-                        <small>Votes: <i>200</i></small>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="images/demo.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="images/demo.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="images/demo.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-            </div>
-        </div>
-        
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 m-2 mb-5">
+        <?php
+        $sql = mysqli_query($conn, "select * from problems");
+        while ($data = mysqli_fetch_array($sql)) {
+            $id = $data['id'];
+            $votes = mysqli_num_rows(mysqli_query($conn, "select * from votes where problem_id = $id"));
+            include 'assets/cause.php';
+        }
+        ?>
+
     </div>
 
 </body>

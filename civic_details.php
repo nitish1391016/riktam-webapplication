@@ -1,5 +1,8 @@
 <?php
 session_start();
+$problems_id = $_GET['id'];
+if (isset($_SESSION['useremail']))
+    $email = $_SESSION['useremail']
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +11,8 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>login</title>
@@ -17,28 +21,122 @@ session_start();
 
 <body>
 
-<?php
+    <?php
     include 'assets/navbar.php';
+    $sql = mysqli_query($conn, "select * from problems where id = $problems_id");
+    $votes = mysqli_num_rows(mysqli_query($conn, "select * from votes where problem_id = $problems_id"));
+    while ($data = mysqli_fetch_array($sql)) {
     ?>
-
-    <div class="row row-cols-lg-2 row-cols-1 d-flex justify-content-center main_div m-5">
-        <div class="col-9 content_left">
-            <img src="images/demo.jpeg" width="100%" alt="" class="img-fluid img-thumbnail mb-3" >
-            <h2 class=" ">Title Lorem ipsum dolor sit amet.</h2>
-            <hr>
-            <p class=" my-4">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora minima, animi provident minus officiis laboriosam sint quas dolorum vel culpa corrupti cupiditate pariatur ut facere veritatis alias voluptatem, totam iste. Debitis quas, facere consectetur odio corrupti tempore voluptatibus recusandae eligendi quaerat, maiores aliquam veniam sint architecto odit ut quo consequuntur esse ad? Beatae, laudantium repellendus harum, assumenda molestiae <br> nobis eligendi sequi consequuntur nulla rem dicta aut minus cumque facere quisquam est illo. Ut ipsa, deleniti minima, similique corrupti tempora ducimus officia voluptas vero pariatur quasi explicabo assumenda itaque? Et cupiditate nemo sapiente saepe dolor ad autem tenetur ut culpa nisi inventore atque corrupti, quae quidem enim laborum veritatis nesciunt, explicabo, vel nostrum? Quisquam eaque iure quo. Similique exercitationem tempora delectus, nemo id, possimus quam qui adipisci a eveniet fuga quidem quos impedit alias? Excepturi iste dolore explicabo autem officia dignissimos voluptatem recusandae delectus magni labore, perferendis, assumenda eius laborum molestias ex! Suscipit adipisci voluptatem omnis voluptas tenetur asperiores nisi accusantium animi quibusdam vitae fuga, iure perferendis facilis maiores tempora, consequatur, voluptatum voluptate ad expedita ipsam corrupti odio commodi quis. Quis temporibus officiis error. Id deleniti quidem architecto quisquam quas quibusdam modi vitae sint asperiores, praesentium perspiciatis quaerat eius odit reiciendis.</p>
-            <a href="edit_form.html" type="button" class="btn btn-primary">Edit</a>
-        </div>
-        <div class="col-3 content_right py-5 border h-50 d-flex flex-column justify-content-center">
-            <div class=" fs-2 d-flex justify-content-start align-items-center text-primary mb-3">
-                <i class="fa fa-thumbs-o-up"></i>&nbsp;100
+        <div class="row row-cols-lg-2 row-cols-1 d-flex justify-content-center main_div m-5">
+            <div class="col-9 content_left">
+                <img src="images/demo.jpeg" width="100%" alt="" class="img-fluid img-thumbnail mb-3">
+                <h2 class=" "><?= $data['title'] ?></h2>
+                <hr>
+                <p class=" my-4"><?= $data['description'] ?></p>
+                <a href="edit_form.php?id=<?= $problems_id ?>" type="button" class="btn btn-primary">Edit</a>
             </div>
-            <p>Location: <i>Medchal</i></p>
-            <p>Status: <b class=" text-warning">Open</b></p>
-            <p>Date : <i>20-01-2022</i></p>
-            <p>Time : <i>10:10:10 AM</i></p>
+            <div class="col-3 content_right py-5 border d-flex flex-column justify-content-center" style="height: fit-content;">
+                <div class=" fs-2 d-flex justify-content-start align-items-center text-primary mb-3">
+                    <?php
+                    $query3 = mysqli_query($conn, "select * from  votes where problem_id ='$problems_id'");
+                    if (isset($_SESSION['useremail'])) {
+                        $query1 = mysqli_query($conn, "select * from votes where problem_id='$problems_id' and user_email='$email'");
+                        if (mysqli_num_rows($query1) > 0) {
+                    ?>
+                            <i class="fa fa-thumbs-up" value="" style="cursor: pointer;"></i>&nbsp;
+                            <span id="likes">
+                                <?php
+                                echo mysqli_num_rows($query3);
+                                ?>
+                            </span>
+                        <?php
+                        } else {
+                        ?>
+                            <i class="fa fa-thumbs-o-up" value="" style="cursor: pointer;"></i>&nbsp;
+                            <span id="likes">
+                                <?php
+                                echo mysqli_num_rows($query3);
+                                ?>
+                            </span>
+                        <?php
+                        }
+                    } else {
+                        ?>
+                        <i class="fa fa-thumbs-o-up" value="" style="cursor: not-allowed;"></i>&nbsp;
+                        <span id="show_like">
+                            <?php
+                            echo mysqli_num_rows($query3);
+                            ?>
+                        </span>
+                    <?php
+                    } ?>
+                </div>
+                <p>Location: <i><?= $data['location'] ?></i></p>
+                <p>Status: <i class=""><?= $data['status'] ?></i></p>
+                <p>Date : <i><?= $data['date'] ?></i></p>
+            </div>
         </div>
-    </div>
+    <?php
+    }
+    ?>
+<script>
+    $(document).ready(function() {
+        useremail ='<?= $email ?>';
+        $(document).on('click', '.fa-thumbs-up', function() {
+            $(this).toggleClass('fa-thumbs-up');
+            if (!$(this).hasClass('fa-thumbs-up')) {
+                $(this).addClass("fa-thumbs-o-up");
+            }
+            $.ajax({
+                type: "POST",
+                url: "vote.php",
+                data: {
+                    useremail: useremail,
+                    id: <?= $problems_id ?>,
+                    like: 1,
+                },
+                success: function(useremail, id) {
+                    showLike(useremail, id);
+                }
+            });
+        });
+
+        $(document).on('click', '.fa-thumbs-o-up', function() {
+            $(this).toggleClass('fa-thumbs-o-up');
+            if (!$(this).hasClass('fa-thumbs-o-up')) {
+                $(this).addClass("fa-thumbs-up");
+            }
+            $.ajax({
+                type: "POST",
+                url: "vote.php",
+                data: {
+                    useremail: useremail,
+                    id: <?= $problems_id ?>,
+                    like: 1,
+                },
+                success: function(useremail, id) {
+                    showLike(useremail, id);
+                }
+            });
+        });
+    });
+    
+    function showLike(useremail) {
+        $.ajax({
+            url: 'show_like.php',
+            type: 'POST',
+            data: {
+                useremail: useremail,
+                id: <?= $problems_id ?>,
+                showlike: 1
+            },
+            success: function(response) {
+                $('#likes' + useremail).html(response);
+
+            }
+        });
+    }
+</script>
 </body>
 
 </html>
